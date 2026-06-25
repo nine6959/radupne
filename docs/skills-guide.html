@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>설치된 Claude Code 스킬 사용 설명서</title>
+<style>
+  :root{
+    --bg:#0f1117; --card:#181b24; --card2:#1f2330; --line:#2a2f3d;
+    --text:#e7e9ee; --muted:#9aa3b2; --accent:#7c9cff; --accent2:#5eead4;
+    --green:#4ade80; --yellow:#fbbf24; --pill:#262b38;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+       background:var(--bg);color:var(--text);line-height:1.65;font-size:16px}
+  .wrap{max-width:1000px;margin:0 auto;padding:28px 18px 80px}
+  header.hero{text-align:center;padding:34px 18px 26px;border-bottom:1px solid var(--line);margin-bottom:24px}
+  .hero h1{font-size:1.9rem;margin:0 0 8px}
+  .hero p{color:var(--muted);margin:6px 0;font-size:1.02rem}
+  .badgebar{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:14px}
+  .stat{background:var(--pill);border:1px solid var(--line);border-radius:999px;padding:5px 14px;font-size:.86rem;color:var(--muted)}
+  .stat b{color:var(--text)}
+  .note{background:var(--card2);border:1px solid var(--line);border-left:4px solid var(--accent);
+        border-radius:10px;padding:14px 16px;margin:20px 0;font-size:.95rem;color:var(--muted)}
+  .note b{color:var(--text)}
+  h2.sec{font-size:1.3rem;margin:34px 0 6px;padding-top:10px;display:flex;align-items:center;gap:10px}
+  h2.sec .dot{width:12px;height:12px;border-radius:50%}
+  .sec-sub{color:var(--muted);font-size:.92rem;margin:0 0 14px}
+  .search{width:100%;padding:13px 16px;border-radius:12px;border:1px solid var(--line);
+          background:var(--card);color:var(--text);font-size:1rem;margin:8px 0 6px}
+  .search:focus{outline:none;border-color:var(--accent)}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:14px;margin-top:8px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 16px 14px;
+        transition:.15s;display:flex;flex-direction:column}
+  .card:hover{border-color:var(--accent);transform:translateY(-2px)}
+  .card h3{margin:0 0 2px;font-size:1.05rem;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--accent2)}
+  .role{font-weight:600;font-size:.96rem;margin:2px 0 8px}
+  .desc{color:var(--muted);font-size:.9rem;margin:0 0 10px;flex:1}
+  .use{background:var(--card2);border-radius:8px;padding:8px 10px;font-size:.84rem;color:var(--text)}
+  .use .lbl{color:var(--accent2);font-size:.74rem;text-transform:uppercase;letter-spacing:.04em;display:block;margin-bottom:3px}
+  .pills{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+  .pill{font-size:.72rem;padding:3px 9px;border-radius:999px;border:1px solid var(--line);background:var(--pill);color:var(--muted)}
+  .pill.ok{color:var(--green);border-color:#1f5132}
+  .pill.be{color:var(--yellow);border-color:#5b4711}
+  .hidden{display:none!important}
+  details.setup{background:var(--card);border:1px solid var(--line);border-radius:12px;margin:12px 0;padding:4px 16px}
+  details.setup summary{cursor:pointer;padding:12px 0;font-weight:600}
+  details.setup pre{background:#0b0d13;border:1px solid var(--line);border-radius:8px;padding:12px;overflow:auto;font-size:.82rem}
+  code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+  a{color:var(--accent)}
+  footer{margin-top:50px;text-align:center;color:var(--muted);font-size:.85rem;border-top:1px solid var(--line);padding-top:18px}
+  .legend{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin:10px 0 0;font-size:.82rem;color:var(--muted)}
+</style>
+</head>
+<body>
+<header class="hero">
+  <h1>🧩 Claude Code 스킬 사용 설명서</h1>
+  <p>유튜브 영상에서 소개된 6개 출처의 스킬을 설치했습니다 — 초보자용 가이드</p>
+  <div class="badgebar">
+    <span class="stat">총 <b>39개</b> 사용 스킬</span>
+    <span class="stat">출처 <b>6곳</b></span>
+    <span class="stat">설치일 <b>2026-06-25</b></span>
+  </div>
+  <div class="legend">
+    <span><span class="pill ok">바로 사용</span> 추가 설치 불필요</span>
+    <span><span class="pill be">백엔드 필요</span> 도구/서버 설치 후 동작</span>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <div class="note">
+    <b>스킬이 뭔가요?</b> 스킬은 Claude에게 주는 <b>"이런 상황엔 이렇게 행동해"라는 전문 설명서</b>입니다.
+    대부분 <b>여러분이 자연스럽게 말하면 Claude가 알아서 해당 스킬을 꺼내 씁니다.</b>
+    예를 들어 "이거 기억해둬"라고 하면 <code>remember</code> 스킬이, 버그를 만나면 <code>systematic-debugging</code> 스킬이 자동으로 작동해요.
+    각 카드의 <b>"이렇게 말하세요"</b>가 그 발동 문구 예시입니다.
+  </div>
+
+  <div class="note" style="border-left-color:var(--yellow)">
+    <b>⚠️ 백엔드 필요 스킬 3종.</b> <code>watch</code>, <code>understand-*</code>, <code>agentmemory</code>의 실사용 스킬은
+    아래 도구/서버를 한 번 설치해야 완전히 동작합니다. 안 깔아도 스킬 자체는 보이지만 실제 기능은 멈춰요.
+  </div>
+
+  <details class="setup">
+    <summary>🎬 watch — 영상 보기 백엔드 설치 방법</summary>
+    <p>영상 다운로드(<code>yt-dlp</code>)와 프레임 추출(<code>ffmpeg</code>)이 필요합니다.</p>
+    <pre># macOS
+brew install yt-dlp ffmpeg
+
+# Ubuntu/Debian
+sudo apt install -y ffmpeg && pipx install yt-dlp</pre>
+    <p>자막 없는 영상은 음성 인식(Whisper)도 쓰며, 이 경우 OpenAI API 키가 필요할 수 있습니다.</p>
+  </details>
+
+  <details class="setup">
+    <summary>🗺️ understand-* — 코드 이해 백엔드(npm CLI) 설치 방법</summary>
+    <p>업스트림 플러그인을 빌드해 <code>understand</code> CLI를 만들어야 합니다.</p>
+    <pre># 원본 저장소를 받아 빌드 (Node.js + pnpm 필요)
+git clone https://github.com/Lum1104/Understand-Anything
+cd Understand-Anything && pnpm install && pnpm build</pre>
+    <p>자세한 설치는 원본 저장소 README를 따르세요. (이 컨테이너 대신 <b>로컬</b> 설치 권장)</p>
+  </details>
+
+  <details class="setup">
+    <summary>🧠 agentmemory — 장기 기억 백엔드(MCP 서버) 설치 방법</summary>
+    <p>메모리 도구를 설치하고 MCP 서버를 실행한 뒤 Claude에 연결해야 합니다.</p>
+    <pre># 원본 저장소 안내를 따라 설치 + 서버 실행 후
+# Claude Code에 MCP 서버로 등록 (connect 명령 사용)</pre>
+    <p>설치/연결 절차는 <code>agentmemory-agents</code>, <code>agentmemory-config</code> 스킬과
+    <a href="https://github.com/rohitg00/agentmemory">원본 저장소</a>에 정리돼 있습니다.</p>
+  </details>
+
+  <input id="q" class="search" placeholder="🔍 스킬 검색 (예: 기억, 디버깅, 영상, 리뷰...)">
+
+  <div id="groups"></div>
+
+  <footer>
+    이 설명서는 <code>.claude/skills/</code>에 설치된 스킬을 기준으로 자동 생성되었습니다.<br>
+    출처·위험도·검토 자동화는 <code>.claude/skills/README.md</code> 및 <code>SKILLS-MANIFEST.json</code> 참고.
+  </footer>
+</div>
+
+<script>
+const GROUPS = [
+  {key:"karpathy", name:"Karpathy Guidelines", color:"#4ade80",
+   sub:"좋은 코딩 습관 — 문서형 지침 (multica-ai/andrej-karpathy-skills)", skills:[
+    {n:"karpathy-guidelines", role:"코딩 실수를 줄이는 행동 지침", be:false,
+     d:"코드를 과하게 복잡하게 만들거나, 멋대로 가정하거나, 여기저기 한꺼번에 고치는 실수를 막아줍니다. ‘간단하게·필요한 부분만·검증 가능하게’ 코딩하도록 Claude를 잡아줘요.",
+     u:"코드 작성·리뷰·리팩터링 시 자동 적용"},
+  ]},
+  {key:"watch", name:"claude-video", color:"#fbbf24",
+   sub:"영상을 Claude가 보게 하기 (bradautomates/claude-video)", skills:[
+    {n:"watch", role:"영상을 보고 내용에 답하기", be:true,
+     d:"유튜브 링크나 영상 파일을 주면 다운로드해서 화면을 캡처하고 자막/음성을 읽어, 영상에 무엇이 나오는지 답해줍니다.",
+     u:"“이 영상 봐줘 https://youtu.be/...” 또는 /watch [URL]"},
+  ]},
+  {key:"superpowers", name:"Superpowers", color:"#7c9cff",
+   sub:"개발 작업 흐름 14종 (obra/superpowers) — 전부 바로 사용", skills:[
+    {n:"brainstorming", role:"아이디어를 설계로 다듬기", be:false,
+     d:"기능을 만들기 전에 질문을 주고받으며 ‘무엇을·왜·어떻게’ 만들지 먼저 정리합니다. 바로 코딩하지 않고 설계부터.",
+     u:"“새 기능 만들기 전에 같이 구상해보자”"},
+    {n:"writing-plans", role:"작업을 잘게 쪼갠 계획서", be:false,
+     d:"큰 작업을 2~5분짜리 작은 단계로 나눠, 정확한 파일·코드·검증 방법까지 적은 계획서를 만듭니다.",
+     u:"“이 작업 계획부터 세워줘”"},
+    {n:"executing-plans", role:"계획을 체크포인트 따라 실행", be:false,
+     d:"작성된 계획서를 단계별로, 중간 확인을 받아가며 실행합니다.",
+     u:"“이 계획대로 진행해줘”"},
+    {n:"subagent-driven-development", role:"서브에이전트로 구현", be:false,
+     d:"독립적인 작업들을 같은 세션에서 보조 에이전트에게 나눠 구현합니다.",
+     u:"“이 작업들 서브에이전트로 나눠서 해줘”"},
+    {n:"dispatching-parallel-agents", role:"작업을 병렬로 분배", be:false,
+     d:"서로 의존이 없는 2개 이상의 작업을 동시에 병렬로 처리합니다.",
+     u:"“이 두 작업 병렬로 처리해줘”"},
+    {n:"test-driven-development", role:"테스트 먼저(TDD)", be:false,
+     d:"구현 코드를 쓰기 전에 테스트부터 작성하고, 그걸 통과시키는 방식으로 개발합니다.",
+     u:"“TDD로 구현해줘”"},
+    {n:"systematic-debugging", role:"체계적 디버깅", be:false,
+     d:"버그나 테스트 실패를 만나면 막 고치지 않고, 원인을 단계적으로 추적해 해결합니다.",
+     u:"버그·테스트 실패 시 자동 작동"},
+    {n:"using-git-worktrees", role:"격리된 작업공간 만들기", be:false,
+     d:"기능 작업을 기존 작업과 분리된 git 워크트리에서 안전하게 진행합니다.",
+     u:"“워크트리에서 작업해줘”"},
+    {n:"requesting-code-review", role:"코드리뷰 요청", be:false,
+     d:"작업 완료나 머지 전에 요구사항을 제대로 충족했는지 리뷰를 요청합니다.",
+     u:"“이 작업 리뷰 요청해줘”"},
+    {n:"receiving-code-review", role:"리뷰 피드백 처리", be:false,
+     d:"받은 리뷰 피드백을 맹목적으로 수용하지 않고, 기술적으로 검증한 뒤 반영합니다.",
+     u:"리뷰를 받을 때 자동 작동"},
+    {n:"verification-before-completion", role:"완료 전 검증", be:false,
+     d:"“다 됐다/고쳤다”고 말하기 전에 실제 명령을 돌려 결과를 확인합니다. 주장보다 증거 먼저.",
+     u:"완료를 주장하기 직전 자동 작동"},
+    {n:"finishing-a-development-branch", role:"개발 브랜치 마무리", be:false,
+     d:"구현이 끝나면 머지·PR·정리 중 무엇을 할지 정리된 선택지로 안내합니다.",
+     u:"“이 브랜치 마무리하자”"},
+    {n:"writing-skills", role:"스킬 만들기 (= Skill Creator)", be:false,
+     d:"새 스킬을 만들거나 고치고 검증합니다. 영상에서 말한 ‘Skill Creator’가 바로 이 스킬이에요.",
+     u:"“새 스킬 만들어줘”"},
+    {n:"using-superpowers", role:"스킬 사용 길잡이(메타)", be:false,
+     d:"대화 시작 시 어떤 스킬을 어떻게 찾아 쓸지 정해주는 바탕 스킬입니다.",
+     u:"대화 시작 시 자동 작동"},
+  ]},
+  {key:"understand", name:"Understand-Anything", color:"#fbbf24",
+   sub:"코드베이스를 그림으로 이해 8종 (Lum1104/Understand-Anything) — npm CLI 필요", skills:[
+    {n:"understand", role:"코드베이스 지식 그래프 생성", be:true,
+     d:"프로젝트 전체를 분석해 구조·구성요소·서로의 관계를 인터랙티브 지식 그래프로 만들어줍니다.",
+     u:"“/understand” 또는 “이 코드베이스 분석해줘”"},
+    {n:"understand-dashboard", role:"그래프 시각화 대시보드", be:true,
+     d:"만들어진 지식 그래프를 웹 화면으로 띄워 마우스로 탐색합니다.",
+     u:"“대시보드 열어줘”"},
+    {n:"understand-chat", role:"코드에 질문하기", be:true,
+     d:"지식 그래프를 바탕으로 ‘이 기능은 어디서 처리돼?’ 같은 질문에 답합니다.",
+     u:"“이 코드에 대해 물어볼게”"},
+    {n:"understand-explain", role:"특정 부분 심층 설명", be:true,
+     d:"특정 파일·함수·모듈 하나를 깊게 파고들어 설명합니다.",
+     u:"“이 함수 자세히 설명해줘”"},
+    {n:"understand-diff", role:"변경/PR 분석", be:true,
+     d:"git diff나 PR이 무엇을 바꿨고 어떤 부분에 영향을 주는지, 위험도는 어떤지 분석합니다.",
+     u:"“이 PR 분석해줘”"},
+    {n:"understand-onboard", role:"온보딩 가이드 생성", be:true,
+     d:"새로 합류하는 팀원을 위한 입문 가이드를 자동으로 만들어줍니다.",
+     u:"“신규 팀원용 온보딩 문서 만들어줘”"},
+    {n:"understand-domain", role:"도메인 지식 추출", be:true,
+     d:"코드에서 비즈니스 도메인 흐름을 뽑아 그래프로 보여줍니다. (가벼운 스캔은 단독 동작)",
+     u:"“이 프로젝트 도메인 구조 뽑아줘”"},
+    {n:"understand-knowledge", role:"지식베이스 분석", be:true,
+     d:"Karpathy식 LLM 위키 지식베이스를 분석해 개체·관계·주제 묶음이 있는 그래프로 만듭니다.",
+     u:"“이 지식베이스 분석해줘”"},
+  ]},
+  {key:"agentmemory", name:"agentmemory", color:"#fbbf24",
+   sub:"세션을 넘어 기억하기 (rohitg00/agentmemory) — 실사용 스킬은 MCP 서버 필요", skills:[
+    {n:"remember", role:"기억 저장", be:true,
+     d:"“이거 기억해”라고 하면 결정·인사이트·배운 점을 검색 가능한 태그와 함께 장기 저장합니다.",
+     u:"“이거 기억해둬”, “잊지마”"},
+    {n:"recall", role:"기억 검색", be:true,
+     d:"과거 세션의 기록을 검색합니다. (키워드+의미+관계 혼합 검색)",
+     u:"“지난번에 인증 어떻게 했지? recall”"},
+    {n:"recap", role:"최근 세션 요약", be:true,
+     d:"최근 작업들을 날짜별로 묶어 핵심만 요약해줍니다.",
+     u:"“이번 주 한 일 요약해줘”"},
+    {n:"handoff", role:"작업 이어받기", be:true,
+     d:"가장 최근 세션을 이어받아 ‘어디까지 했는지’부터 알려줍니다.",
+     u:"“이어서 하자”, “where were we”"},
+    {n:"session-history", role:"세션 타임라인", be:true,
+     d:"이 프로젝트의 과거 세션들을 깔끔한 타임라인으로 보여줍니다.",
+     u:"“지난 세션들 보여줘”"},
+    {n:"forget", role:"기억 삭제", be:true,
+     d:"특정 메모리를 보여주고 확인을 받은 뒤 삭제합니다. (개인정보 정리 등)",
+     u:"“이거 잊어버려”, “이 메모 삭제해”"},
+    {n:"commit-context", role:"커밋 맥락 추적", be:true,
+     d:"‘이 코드가 왜 여기 있지?’ — 해당 코드를 만든 에이전트 세션까지 거슬러 추적합니다.",
+     u:"“이 줄 왜 이렇게 됐어?”"},
+    {n:"commit-history", role:"세션 연결 커밋 목록", be:true,
+     d:"에이전트 세션과 연결된 최근 커밋들을 맥락과 함께 나열합니다.",
+     u:"“에이전트가 만든 커밋 보여줘”"},
+    {n:"agentmemory-config", role:"설정 안내 (문서)", be:false,
+     d:"환경변수·포트·기능 플래그 등 agentmemory 설정 방법을 설명합니다. 백엔드 없이도 읽힙니다.",
+     u:"“agentmemory 설정 알려줘”"},
+    {n:"agentmemory-architecture", role:"내부 구조 (문서)", be:false,
+     d:"메모리가 어떻게 저장되고 검색되는지 내부 원리를 설명합니다.",
+     u:"“agentmemory 원리 설명해줘”"},
+    {n:"agentmemory-mcp-tools", role:"MCP 도구 목록 (문서)", be:false,
+     d:"agentmemory가 제공하는 모든 MCP 도구와 각 기능·매개변수를 안내합니다.",
+     u:"“메모리 도구 뭐뭐 있어?”"},
+    {n:"agentmemory-rest-api", role:"REST API (문서)", be:false,
+     d:"HTTP로 메모리 서버를 호출하는 방법. MCP를 못 쓸 때의 대안입니다.",
+     u:"“REST로 메모리 쓰는 법 알려줘”"},
+    {n:"agentmemory-agents", role:"에이전트 연결 (설정)", be:true,
+     d:"특정 코딩 에이전트(Claude/Codex/Cursor 등)에 agentmemory를 설치·연결하는 방법입니다.",
+     u:"“내 에이전트에 agentmemory 연결해줘”"},
+    {n:"agentmemory-hooks", role:"자동 캡처 훅 (문서)", be:false,
+     d:"수동 저장 없이 세션 동안 작업을 자동으로 기록하는 훅을 설명합니다.",
+     u:"“자동 기록이 어떻게 되는 거야?”"},
+    {n:"write-agentmemory-skill", role:"스킬 작성 규칙 (문서)", be:false,
+     d:"agentmemory 스킬을 새로 만들거나 고칠 때 따라야 할 형식·규칙입니다.",
+     u:"“agentmemory 스킬 만들고 싶어”"},
+  ]},
+];
+
+const groupsEl = document.getElementById("groups");
+GROUPS.forEach(g=>{
+  const sec = document.createElement("section");
+  sec.className="group-sec";
+  sec.innerHTML = `<h2 class="sec"><span class="dot" style="background:${g.color}"></span>${g.name}
+      <span style="font-size:.8rem;color:var(--muted);font-weight:400">(${g.skills.length})</span></h2>
+    <p class="sec-sub">${g.sub}</p>
+    <div class="grid"></div>`;
+  const grid = sec.querySelector(".grid");
+  g.skills.forEach(s=>{
+    const card = document.createElement("div");
+    card.className="card";
+    card.dataset.text = (s.n+" "+s.role+" "+s.d+" "+s.u).toLowerCase();
+    card.innerHTML = `
+      <h3>${s.n}</h3>
+      <div class="role">${s.role}</div>
+      <div class="desc">${s.d}</div>
+      <div class="use"><span class="lbl">이렇게 말하세요</span>${s.u}</div>
+      <div class="pills">
+        ${s.be?'<span class="pill be">백엔드 필요</span>':'<span class="pill ok">바로 사용</span>'}
+      </div>`;
+    grid.appendChild(card);
+  });
+  groupsEl.appendChild(sec);
+});
+
+const q = document.getElementById("q");
+q.addEventListener("input", ()=>{
+  const v = q.value.trim().toLowerCase();
+  document.querySelectorAll(".group-sec").forEach(sec=>{
+    let shown=0;
+    sec.querySelectorAll(".card").forEach(c=>{
+      const hit = !v || c.dataset.text.includes(v);
+      c.classList.toggle("hidden", !hit);
+      if(hit) shown++;
+    });
+    sec.classList.toggle("hidden", shown===0);
+  });
+});
+</script>
+</body>
+</html>
