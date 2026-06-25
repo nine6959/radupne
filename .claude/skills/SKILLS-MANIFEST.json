@@ -1,0 +1,72 @@
+{
+  "description": "Provenance manifest for vendored Claude Code skills. Used as the baseline for periodic upstream drift review. Versions are PINNED: skills are a frozen snapshot and never auto-update. The review automation diffs upstream against these vendored copies and reports drift for human approval before any update.",
+  "retrievedAt": "2026-06-25T04:43:55Z",
+  "retrievalMethod": "codeload.github.com tarball (main branch), git clone is blocked by egress policy",
+  "sources": [
+    {
+      "name": "andrej-karpathy-skills",
+      "displayName": "Karpathy Guidelines",
+      "repo": "multica-ai/andrej-karpathy-skills",
+      "branch": "main",
+      "sourcePath": "skills",
+      "skills": ["karpathy-guidelines"],
+      "risk": "low",
+      "notes": "Documentation-only guidelines. No executable code or hooks."
+    },
+    {
+      "name": "claude-video",
+      "displayName": "claude-video (watch)",
+      "repo": "bradautomates/claude-video",
+      "branch": "main",
+      "sourcePath": ".",
+      "vendoredAs": "watch",
+      "skills": ["watch"],
+      "risk": "medium",
+      "notes": "SessionStart hook (check-setup.sh) + Python scripts (yt-dlp/ffmpeg/whisper). Requires yt-dlp, ffmpeg, and optionally Whisper to function."
+    },
+    {
+      "name": "superpowers",
+      "displayName": "Superpowers",
+      "repo": "obra/superpowers",
+      "branch": "main",
+      "sourcePath": "skills",
+      "skills": [
+        "brainstorming", "dispatching-parallel-agents", "executing-plans",
+        "finishing-a-development-branch", "receiving-code-review", "requesting-code-review",
+        "subagent-driven-development", "systematic-debugging", "test-driven-development",
+        "using-git-worktrees", "using-superpowers", "verification-before-completion",
+        "writing-plans", "writing-skills"
+      ],
+      "risk": "low",
+      "notes": "Well-known maintainer (Jesse Vincent). NOTE: upstream ships a SessionStart hook (hooks/session-start) that is NOT vendored here; only the skills/ directory was copied."
+    },
+    {
+      "name": "understand-anything",
+      "displayName": "Understand-Anything",
+      "repo": "Lum1104/Understand-Anything",
+      "branch": "main",
+      "sourcePath": "understand-anything-plugin/skills",
+      "skills": [
+        "understand", "understand-chat", "understand-dashboard", "understand-diff",
+        "understand-domain", "understand-explain", "understand-knowledge", "understand-onboard"
+      ],
+      "risk": "medium",
+      "notes": "Skills call an npm/TypeScript CLI backend that is NOT vendored. Needs the upstream plugin built (npm/pnpm) to be fully functional."
+    },
+    {
+      "name": "agentmemory",
+      "displayName": "agentmemory",
+      "repo": "rohitg00/agentmemory",
+      "branch": "main",
+      "sourcePath": "plugin/skills",
+      "skills": [
+        "_shared", "agentmemory-agents", "agentmemory-architecture", "agentmemory-config",
+        "agentmemory-hooks", "agentmemory-mcp-tools", "agentmemory-rest-api",
+        "commit-context", "commit-history", "forget", "handoff", "recall", "recap",
+        "remember", "session-history", "write-agentmemory-skill"
+      ],
+      "risk": "medium",
+      "notes": "Skills depend on the agentmemory MCP server + npm tool (NOT vendored). Upstream ships hooks (plugin/hooks) that are NOT vendored. Requires separate install + MCP config to function."
+    }
+  ]
+}

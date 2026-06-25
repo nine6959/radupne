@@ -1,0 +1,42 @@
+name: Skill drift review
+
+# Periodically checks whether the upstream sources of the vendored skills in
+# .claude/skills/ have changed. It NEVER auto-applies updates — on drift it opens
+# an issue so a human can review the diff and decide whether to update.
+
+on:
+  schedule:
+    # Monthly: 09:00 UTC on the 1st of every month.
+    - cron: "0 9 1 * *"
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run skill drift review
+        id: review
+        run: |
+          set +e
+          REPORT=skill-drift-report.md ./scripts/review-skills.sh
+          echo "drift=$?" >> "$GITHUB_OUTPUT"
+          echo "----- report -----"
+          cat skill-drift-report.md
+
+      - name: Open issue on drift
+        if: steps.review.outputs.drift != '0'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          TITLE="Skill drift detected ($(date -u +%Y-%m-%d))"
+          gh issue create \
+            --title "$TITLE" \
+            --body-file skill-drift-report.md \
+            --label "skill-review" 2>/dev/null \
+          || gh issue create --title "$TITLE" --body-file skill-drift-report.md
